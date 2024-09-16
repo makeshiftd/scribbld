@@ -1,0 +1,5 @@
+
+# Hugo user data
+.hugo_build.lock
+content/
+public/

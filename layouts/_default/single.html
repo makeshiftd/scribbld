@@ -1,0 +1,90 @@
+{{ define "main" }}
+<div id="doc-view">
+  <div class="row justify-content-center">
+    <div class="col-10 border-bottom">
+      <button class="btn float-end" onclick="edit()"><i class="bi bi-pencil-fill"></i></button>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-10">
+      <h3>{{ .Title }}</h3>
+      <div>{{ .Content }}</div>
+    </div>
+  </div>
+</div>
+
+<div id="src-view" class="d-none">
+  <div class="row justify-content-center">
+    <div class="col-10 border-bottom">
+      <button class="btn btn-outline-primary" onclick="save()"><i class="bi bi-save2"></i></button>
+      <button class="btn btn-outline-danger float-end" onclick="cancel()"><i class="bi bi-x-circle"></i></button>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-10">
+      <textarea id="src-edit" class="form-control" rows="25"></textarea>
+    </div>
+  </div>
+</div>
+{{ end }}
+
+{{ define "footer" }}
+<script type="text/javascript">
+
+async function edit() {
+  try {
+    const srcPath = window.location.pathname
+                    .replace(/^\/docs/, "/srcs")
+                    .replace(/\/*$/, "/index.md");
+
+    const res = await fetch(srcPath)
+    const body = await res.text();
+
+    const doc_view = document.getElementById("doc-view");
+    doc_view.classList.add("d-none");
+    const src_view = document.getElementById("src-view");
+    src_view.classList.remove("d-none");
+    const text_edit = document.getElementById("src-edit");
+    text_edit.value = body;
+  }
+  catch(err) {
+    console.log("Error editing document", err);
+  }
+};
+
+async function save() {
+  try { 
+    let docPath = window.location.pathname.replace(/\/$/, "/index.md");
+    console.log(docPath);
+
+    const srcEdit = document.getElementById("src-edit");
+
+    const encoder = new TextEncoder();
+
+    const res = await fetch(docPath, {
+      method: "POST",
+      body: srcEdit.value,
+    });
+
+    if (res.status >= 400) {
+      alert((await res.text()) || "Unknown Save Error");
+      return;
+    }
+
+    window.location.reload();
+  }
+  catch(err) {
+    console.log("Error saving document", err);
+  }
+}
+
+function cancel() {
+    const doc_view = document.getElementById("doc-view");
+    doc_view.classList.remove("d-none");
+    const src_view = document.getElementById("src-view");
+    src_view.classList.add("d-none");
+};
+
+
+</script>
+{{ end }}

@@ -1,0 +1,20 @@
+{{ define "main" }}
+<div class="row justify-content-center">
+  <div class="col-10 border-bottom">
+  </div>
+</div>
+
+{{ range .Site.RegularPages }}
+<div class="row justify-content-center">
+  <div class="card col-10">
+    <div class="card-body">
+      <h5 class="card-title">
+        <a href="{{ path.Join `/docs` .RelPermalink | printf `%v/` }}">
+          {{ .Title }}
+        </a>
+      </h5>
+    </div>
+  </div>
+</div>
+{{ end }}
+{{ end }}
