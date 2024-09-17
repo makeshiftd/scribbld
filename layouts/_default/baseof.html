@@ -16,22 +16,39 @@
     <div class="container-fluid">
       <div class="row justify-content-center">
         <div class="col-10">
-          <form>
-            <div class="input-group mb-3">
+            <a href="/docs/" class="button"><i class="bi bi-house"></i></a>
+            <button class="btn btn-outline-secondary" type="button" onclick="create()"><i class="bi bi-plus"></i></button>
+            <!-- <p class="input-group">
               <input type="text" class="form-control" placeholder="Full Text Search" disabled>
               <button class="btn btn-outline-secondary" type="button" disabled><i class="bi bi-search"></i></button>
-            </div>
-          </form>
+            </p> -->
         </div>
       </div>
-
-      {{ block "main" . }}
-        Default main content
-      {{ end }}
+      {{ block "main" . }}{{ end }}
     </div>
-    {{ block "footer" . }}
-    <!-- More shared code, perhaps a footer but that can be overridden if need be in  -->
-    {{ end }}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      async function create() {
+        try {
+          const now = new Date();
+          const template = `+++
+title = 'New Scribbl ${now.toISOString()}'
+date = ${now.toISOString()}
+tags = []
++++`
+
+          const docPath = `/docs/${now.getTime()}/`
+          const res = await fetch(docPath + "index.md", {
+            method: "POST",
+            body: template,
+          });
+
+          window.location = docPath;
+        } catch (err) {
+          console.err("Error creating document", err);
+        }
+      };
+    </script>
+    {{ block "footer" . }}{{ end }}
   </body>
 </html>

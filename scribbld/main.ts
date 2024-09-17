@@ -1,5 +1,6 @@
 import { serveDir } from "@std/http/file-server";
-import { STATUS_CODE } from "@std/http/status"
+import { STATUS_CODE } from "@std/http/status";
+import * as path from "@std/path";
 import * as log from "@std/log";
 
 import { type Handler, type Route, route } from "@std/http/route";
@@ -12,9 +13,10 @@ interface DocGenerator {
 function postDocHandler(generator: DocGenerator): Handler {
     return async (req: Request): Promise<Response> => {
         const url = new URL(req.url);
-        const path = url.pathname.replace(/^\/docs/, "./content");
-        await Deno.writeFile(path, await req.bytes());
-        
+        const filePath = url.pathname.replace(/^\/docs/, "./content");
+        await Deno.mkdir(path.dirname(filePath), { recursive: true});
+        await Deno.writeFile(filePath, await req.bytes());
+
         try {
             await generator.run();
         } catch(err) {
@@ -152,7 +154,11 @@ async function main() {
     ];
 
     const server = Deno.serve(
-        { signal: mainCtlr.signal },
+        {
+            hostname: Deno.env.get("HTTP_HOST") || "127.0.0.1",
+            port: Number(Deno.env.get("HTTP_PORT") || "9000"),
+            signal: mainCtlr.signal,
+        },
         route(handlers, defaultHandler),
     );
 
