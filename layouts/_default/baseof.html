@@ -14,14 +14,18 @@
   </head>
   <body>
     <div class="container-fluid">
-      <div class="row justify-content-center">
-        <div class="col-10">
-            <a href="/docs/" class="button"><i class="bi bi-house"></i></a>
-            <button class="btn btn-outline-secondary" type="button" onclick="create()"><i class="bi bi-plus"></i></button>
-            <!-- <p class="input-group">
-              <input type="text" class="form-control" placeholder="Full Text Search" disabled>
-              <button class="btn btn-outline-secondary" type="button" disabled><i class="bi bi-search"></i></button>
-            </p> -->
+      <div class="row justify-content-center p-3">
+        <div class="col-auto">
+            <a href="/docs/" class="btn btn-outline-secondary"><i class="bi bi-house"></i></a>
+        </div>
+        <div class="col-8">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Full Text Search" disabled>
+            <button class="btn btn-outline-secondary" type="button" disabled><i class="bi bi-search"></i></button>
+          </div>
+        </div>
+        <div class="col-auto">
+          <button class="btn btn-outline-secondary" type="button" onclick="create()"><i class="bi bi-plus-lg"></i></button>
         </div>
       </div>
       {{ block "main" . }}{{ end }}

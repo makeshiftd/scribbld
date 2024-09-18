@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "start-dev": "deno --watch -A ./scribbld/main.ts"
+    "scribbld-dev": "deno --watch -A ./scribbld/main.ts"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1",
