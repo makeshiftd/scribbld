@@ -12,7 +12,12 @@
           {{ .Title }}
       </h5>
       <small class="card-subtitle text-body-secondary">
-        Created: {{ .Date }}
+        Created:
+        {{ if time.Now.AddDate 0 0 -1 | .Date.Before }}
+        {{ .Date.Local.Format "2006-01-02" }}
+        {{ else }}
+        {{ .Date.Local.Format "15:04:05" }}
+        {{ end }}
       </small>
       <a class="stretched-link" href="{{ path.Join `/docs` .RelPermalink | printf `%v/` }}"></a>
     </div>
